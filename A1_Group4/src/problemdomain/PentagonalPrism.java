@@ -1,6 +1,6 @@
 package problemdomain;
 
-public class PentagonalPrism extends GeometricalShape {
+public class PentagonalPrism extends Prism {
 	
 	public double calcBaseArea() {
 		return (Math.pow(super.getSide(), 2) * Math.sqrt(3)) / 4;

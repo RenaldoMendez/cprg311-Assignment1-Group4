@@ -124,5 +124,7 @@ public class SortingShape {
 		int size = shapeArr.length;
 
 	}
+	
+	public static void quickSort()
 
 }

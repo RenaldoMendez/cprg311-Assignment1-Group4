@@ -1,6 +1,6 @@
 package problemdomain;
 
-public class SquarePrism extends GeometricalShape {
+public class SquarePrism extends Prism {
 	
 	public double calcBaseArea() {
 		return Math.pow(super.getSide(), 2);
