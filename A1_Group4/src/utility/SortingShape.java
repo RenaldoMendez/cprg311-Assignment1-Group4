@@ -1,8 +1,15 @@
 package utility;
 
+import java.lang.reflect.Array;
+
+import manager.BaseAreaCompare;
+import manager.VolumeCompare;
+import problemdomain.GeometricalShape;
+
 public class SortingShape {
 
 	public static void BubbleSort(double[] shapeArr) {
+		//grab current time at start
 		int size = shapeArr.length;
 
 		for (int i = 0; i < size - 1; ++i) {
@@ -15,11 +22,13 @@ public class SortingShape {
 				}
 			}
 		}
+		//grab current time at end
 	}
 
 	public static void SelectionSort(double[] shapeArr) {
+		//grab current time at start
 		int size = shapeArr.length;
-
+		
 		for (int i = 0; i < size; i++) {
 			for (int j = i + 1; j < size; j++) {
 				if (shapeArr[i] > shapeArr[j]) {
@@ -29,26 +38,29 @@ public class SortingShape {
 				}
 			}
 		}
+		//grab current time at end
 
 	}
 
-	public static void InsertionSort(double[] shapeArr) {
+	public static void InsertionSort(GeometricalShape[] shapeArr) {
+		//grab current time at start
 		int size = shapeArr.length;
 
 		for (int i = 0; i < size; i++) {
-			double temp = shapeArr[i];
+			GeometricalShape temp = shapeArr[i];
 			int j = i - 1;
 
-			while (j > -1 && (shapeArr[j] > temp)) {
+			while (j > -1 && (shapeArr[j] > temp)) { //the > operator cannot compare two objects, must use compare or compareTo method
 				shapeArr[j + 1] = shapeArr[j];
 				j--;
 			}
 			shapeArr[j + 1] = temp;
 		}
-
+		//grab current time at end
 	}
 
 	public static void MergeSort(double[] shapeArr) {
+		//grab current time at start
 		int size = shapeArr.length;
 
 		if (size > 2) {
@@ -72,11 +84,11 @@ public class SortingShape {
 		MergeSort(right);
 		
 		Merge(shapeArr, left, right, mid, size - mid);
-
+		//grab current time at end
 	}
 
 	private static void Merge(double[] shapeArr, double[] left, double[] right, int l, int r) {
-		
+		//grab current time at start
 		int i = 0, j = 0, k = 0;
 		
 		while (i < l && j < r) {
@@ -92,39 +104,119 @@ public class SortingShape {
 		while(j < r) {
 			shapeArr[k++] = right[j++];
 		}
+		//grab current time at end
 	}
 
-	public static void QuickSort(double[] shapeArr) {
-		int size = shapeArr.length;
-
-	}
-	
-	private int partition(double[] shapeArr, int begin, int end) {
-		double pivot = shapeArr[end];
-		int i = (begin - 1);
+	//---------------------------------------------------QUICK SORT BEGINS--------------------------------------------------------------------------------//
+	/**
+	 * sorts the array in descending order using the quick sort algorithm
+	 * @param shapeArr
+	 * @param compareType
+	 */
+	public static void quickSort(GeometricalShape[] shapeArr, String compareType) {
+		//grab current time at start
 		
-		for(int j = begin; j < end; j++) {
-			if(shapeArr[j] <= pivot) {
-				i++;
-				
-				double temp = shapeArr[i];
-				shapeArr[i] = shapeArr[j];
-				shapeArr[j] = temp;
+		quickSort(shapeArr, 0, shapeArr.length-1, compareType); // will call partition method
+		
+		//grab current time at end
+	}
+	public static void quickSort(GeometricalShape[] shapeArr, int left, int right, String compareType) {
+		if (left >= right) {//check bounds
+			return;
+		}
+		
+		GeometricalShape pivot = shapeArr[(left + right) / 2]; // pick a shape as pivot close to the middle index
+		int index = 0; //holds the index which divides a partition; returned by a partition method
+		
+		//call specific method based on specified compare type
+		switch (compareType){
+		case "h": index = partitionHeight(shapeArr, left, right, pivot);//call quickSort with height comparison
+			break;
+		case "v": index = partitionVolume(shapeArr, left, right, pivot);//call quickSort with volume comparison
+			break;
+		default: index = partitionBaseArea(shapeArr, left, right, pivot);//call quickSort with area comparison
+			break;
+		}
+		
+	 	quickSort(shapeArr, left, index-1, compareType); //recursively call quick sort on the left partition
+	 	quickSort(shapeArr,index, right, compareType); //recursively call quick sort on the right partition
+	}	
+		
+	public static int partitionHeight(GeometricalShape[] shapeArr, int left, int right, GeometricalShape pivot) {
+		while (left <= right) { // loop while the left index is less than or equal to the right index
+			while (shapeArr[left].compareTo(pivot) == 1) { //if the element at index left is greater than the pivot, then its alredy in the right place, skip it
+				left++; // move from left to right
+			}
+			while (shapeArr[right].compareTo(pivot) == -1) { // if element at index right is less than the pivot then its in the right place, skip it
+				right--; //move from right to left
+			}
+			if(left <= right) { //after the left and right iterators land on 2 elements out of place, then check if left index is still less than right index
+				swap(shapeArr, left, right); //switch the two elements so they are in descending order
+				left++;
+				right--;
 			}
 		}
 		
-		double temp = shapeArr[i+1];
-		shapeArr[i+1] = shapeArr[end];
-		shapeArr[end] = temp;
-		
-		return i + 1;
+		return left; //left is going to be the partition point at the end of each partition
 	}
+	
+	public static int partitionVolume(GeometricalShape[] shapeArr, int left, int right, GeometricalShape pivot) {
+		VolumeCompare volumeCompare = new VolumeCompare();
+		while (left <= right) { // loop while the left index is less than or equal to the right index
+			while (volumeCompare.compare(shapeArr[left], pivot) == 100) { //if the element at index left is greater than the pivot, then its alredy in the right place, skip it
+				left++; // move from left to right
+			}
+			while (volumeCompare.compare(shapeArr[left], pivot) == -100) { // if element at index right is less than the pivot then its in the right place, skip it
+				right--; //move from right to left
+			}
+			if(left <= right) { // if after the left and right iterators land on 2 elements out of place, then check if left index is still less than right index
+				swap(shapeArr, left, right); //switch the two elements so they are in descending order
+				left++;
+				right--;
+			}
+		}
+		
+		return left; //left is going to be the partition point at the end of each partition
+	}
+	
+	public static int partitionBaseArea(GeometricalShape[] shapeArr, int left, int right, GeometricalShape pivot) {
+		BaseAreaCompare areaCompare = new BaseAreaCompare();
+		while (left <= right) { // loop while the left index is less than or equal to the right index
+			while (areaCompare.compare(shapeArr[left], pivot) == 100) { //if the element at index left is greater than the pivot, then its alredy in the right place, skip it
+				left++; // move from left to right
+			}
+			while (areaCompare.compare(shapeArr[left], pivot) == -100) { // if element at index right is less than the pivot then its in the right place, skip it
+				right--; //move from right to left
+			}
+			if(left <= right) { // if after the left and right iterators land on 2 elements out of place, then check if left index is still less than right index
+				swap(shapeArr, left, right); //switch the two elements so they are in descending order
+				left++;
+				right--;
+			}
+		}
+		
+		return left; //left is going to be the partition point at the end of each partition
+	}
+	
+	/**
+	 * swaps elements at index left, and right
+	 * @param shapeArr
+	 * @param left
+	 * @param right
+	 */
+	public static void swap(GeometricalShape[] shapeArr, int left, int right) {
+		GeometricalShape temp = shapeArr[left];
+		shapeArr[left] = shapeArr[right];
+		shapeArr[right] = temp;
+		
+	}
+	//-----------------------------------------QUICK SORT ENDS--------------------------------------------------------------------------------------------//
 
 	public static void RandomSort(double[] shapeArr) {
 		int size = shapeArr.length;
 
 	}
 	
-	public static void quickSort()
+	
 
 }

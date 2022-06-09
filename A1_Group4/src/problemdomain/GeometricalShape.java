@@ -1,6 +1,8 @@
 package problemdomain;
 
-public class GeometricalShape implements Comparable<GeometricalShape> {
+import java.util.Comparator;
+
+public abstract class GeometricalShape implements Comparable<GeometricalShape>, Comparator<GeometricalShape> {
 	private double height;
 	
 
@@ -23,25 +25,30 @@ public class GeometricalShape implements Comparable<GeometricalShape> {
 	}
 
 	
-	public double calcVolume() {
-		return 0;
-		
-	}
+	public abstract double calcVolume();
 	
-	public double calcBaseArea() {
-		return 0;
-	}
+	public abstract double calcBaseArea();
 
 	@Override
 	public int compareTo(GeometricalShape that) {
-		if(this.height > that.height) {
+		if(this.getHeight() > that.getHeight()) {
 			return 1;
 		}
-		else if(this.height < that.height) {
+		else if(this.getHeight() < that.getHeight()) {
 			return -1;
 		}
 		else
 			return 0;
+	}
+	
+	@Override
+	public int compare(GeometricalShape o1, GeometricalShape o2) {
+		if(o1.calcBaseArea() > o2.calcBaseArea()) {
+			return 1;
+		}else if (o1.calcBaseArea() < o2.calcBaseArea()) {
+			return -1;
+		}else
+		return 0;
 	}
 	
 

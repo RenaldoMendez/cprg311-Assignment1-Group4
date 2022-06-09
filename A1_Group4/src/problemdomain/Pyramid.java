@@ -1,10 +1,10 @@
 package problemdomain;
 
-public class Pyramid extends GeometricalShape {
+public class Pyramid extends Prism {
 
-	public Pyramid(double side, double height) {
-		super.getHeight();
-		super.getSide();
+	public Pyramid(double height, double side) {
+		super.setHeight(height);
+		super.setSide(side);
 	}
 
 	public double calcBaseArea() {

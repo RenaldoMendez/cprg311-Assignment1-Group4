@@ -25,7 +25,7 @@ public class GeoShapeManager {
 		SortingShape sortArray = new SortingShape();
 	}
 
-	public void displayOption() {
+/*	public void displayOption() {
 		String option = "[Enter Your Option]";
 		while (option != "E") {
 			System.out.println("Welcome! What kind of sorting do you want to implement?");
@@ -55,7 +55,7 @@ public class GeoShapeManager {
 			}
 		}
 
-	}
+	}*/
 
 	public void CompareType() {
 
@@ -153,7 +153,9 @@ public class GeoShapeManager {
 
 	}
 
+	//calls sorting method and prints out the sorted array
 	public void bubbleSort() {
+		//grab current time at start
 		sortArray.BubbleSort(shapeArray);
 		int size = shapeArray.length;
 
@@ -191,7 +193,12 @@ public class GeoShapeManager {
 	}
 
 	public void quickSort() {
+		sortArray.quickSort(shapeArray, compareType); // compare type variable should be passed to the array, it decides compare metric based on the value of the compare type
+		int size = shapeArray.length;
 
+		for (int i = 0; i < size; i++) {
+			System.out.println(shapeArray[i] + " ");
+		}
 	}
 
 	public void randomSort() {
@@ -319,5 +326,7 @@ public class GeoShapeManager {
 
 		return shapeArray;
 	}
+	
+	//time check method for sorts
 
 }
