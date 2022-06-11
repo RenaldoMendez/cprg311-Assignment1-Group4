@@ -1,6 +1,7 @@
 package utility;
 
 import java.lang.reflect.Array;
+import java.util.Vector;
 
 import manager.BaseAreaCompare;
 import manager.VolumeCompare;
@@ -144,7 +145,7 @@ public class SortingShape {
 		
 	public static int partitionHeight(GeometricalShape[] shapeArr, int left, int right, GeometricalShape pivot) {
 		while (left <= right) { // loop while the left index is less than or equal to the right index
-			while (shapeArr[left].compareTo(pivot) == 1) { //if the element at index left is greater than the pivot, then its alredy in the right place, skip it
+			while (shapeArr[left].compareTo(pivot) == 1) { //if the element at index left is greater than the pivot, then its already in the right place, skip it
 				left++; // move from left to right
 			}
 			while (shapeArr[right].compareTo(pivot) == -1) { // if element at index right is less than the pivot then its in the right place, skip it
@@ -203,7 +204,7 @@ public class SortingShape {
 	 * @param shapeArr
 	 * @param left
 	 * @param right
-	 */
+	 */z
 	public static void swap(GeometricalShape[] shapeArr, int left, int right) {
 		GeometricalShape temp = shapeArr[left];
 		shapeArr[left] = shapeArr[right];
@@ -211,10 +212,46 @@ public class SortingShape {
 		
 	}
 	//-----------------------------------------QUICK SORT ENDS--------------------------------------------------------------------------------------------//
-
-	public static void RandomSort(double[] shapeArr) {
+	 /**
+	  * the algorithm sorts a list of GeometricalShape Objects by comparing their height, baseArea, or volume
+	  * it divides each shape by one of these metrics into a bucket with a range of values that it accepts (there are
+	  * as many buckets as there are objects in the array). so that shape will go into the bucket with a range that covers what ever metric its being measured by.
+	  * When all the objects are separated into buckets, each bucket is sorted individually by a recursive bucket sort, or any other sorting algorithm.
+	  * when each bucket is sorted, append the values of each bucket to the array in the order that will cause it to be sorted.
+	  * @param shapeArr
+	  * @param compareType
+	  */
+	public static void bucketSort(GeometricalShape[] shapeArr, String compareType) {
 		int size = shapeArr.length;
-
+		
+		if(size <= 0) //if array is empty or in the negatives then no sorting is required
+			return;
+		
+		//create size amount of buckets
+		GeometricalShape[][] buckets = new GeometricalShape[size];
+		
+		for (int i = 0; i < size; i++) {
+			buckets[i] = new GeometricalShape[1];
+		
+		
+		//put shape objects from shapeArr into each bucket
+		for(int i = 0; i < size; i++) {
+			double idx = shapeArr[i].getHeight();
+			buckets[(int)idx] = shapeArr[i]; //get the integer value of the height of that specific shape and set it as the range for the bucket
+		}
+		
+		//sort individual buckets
+		for (int i = 0; i < size; i++) {
+			quickSort(buckets[i], compareType);
+		}
+		
+		//concatenate all buckets back into the array; they will be sorted 
+		int index = 0;
+		for(int i = 0; i < size; i++) {
+			for (int j = 0; j< buckets[i].size(); j++) {
+				shapeArr[index++] = buckets[i].get(j);
+			}
+		}
 	}
 	
 	

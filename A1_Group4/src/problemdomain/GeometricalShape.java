@@ -2,7 +2,7 @@ package problemdomain;
 
 import java.util.Comparator;
 
-public abstract class GeometricalShape implements Comparable<GeometricalShape>, Comparator<GeometricalShape> {
+public abstract class GeometricalShape implements Comparable<GeometricalShape>, Comparator<GeometricalShape>{
 	private double height;
 	
 
@@ -29,6 +29,7 @@ public abstract class GeometricalShape implements Comparable<GeometricalShape>, 
 	
 	public abstract double calcBaseArea();
 
+	//Not necessary, the compareTo methods have their own classes
 	@Override
 	public int compareTo(GeometricalShape that) {
 		if(this.getHeight() > that.getHeight()) {
@@ -40,7 +41,6 @@ public abstract class GeometricalShape implements Comparable<GeometricalShape>, 
 		else
 			return 0;
 	}
-	
 	@Override
 	public int compare(GeometricalShape o1, GeometricalShape o2) {
 		if(o1.calcBaseArea() > o2.calcBaseArea()) {
