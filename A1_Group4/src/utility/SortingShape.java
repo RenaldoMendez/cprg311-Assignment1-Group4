@@ -212,6 +212,7 @@ public class SortingShape {
 		
 	}
 	//-----------------------------------------QUICK SORT ENDS--------------------------------------------------------------------------------------------//
+	//------------------------------------------BUCKET SORT BEGINS---------------------------------------------------------------------------------------//
 	 /**
 	  * the algorithm sorts a list of GeometricalShape Objects by comparing their height, baseArea, or volume
 	  * it divides each shape by one of these metrics into a bucket with a range of values that it accepts (there are
@@ -228,10 +229,10 @@ public class SortingShape {
 			return;
 		
 		//create size amount of buckets
-		GeometricalShape[][] buckets = new GeometricalShape[size];
+		GeometricalShape[] buckets = new GeometricalShape[size];
 		
-		for (int i = 0; i < size; i++) {
-			buckets[i] = new GeometricalShape[1];
+		/*for (int i = 0; i < size; i++) {
+			buckets[i] = new GeometricalShape[1];*/
 		
 		
 		//put shape objects from shapeArr into each bucket
@@ -256,4 +257,6 @@ public class SortingShape {
 	
 	
 
+}
+	//------------------------------------------BUCKET SORT ENDS---------------------------------------------------------------------------------------//
 }
